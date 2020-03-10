@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Primera Pagina</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h2><b>Welcome</b></h2>
+    <div class="form-group">
+        <label for="usr">Set GitHub username:</label>
+        <br>
+        <div class="col-sm-6">
+            <input type="text" id="usr" name="usr" class="form-control">
+        </div>
+        <div class="col-sm-2">
+            <button id="search" class="btn btn-default btn-med">Search</button>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <table class="table table-hover" id="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Followers</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+</div>
+<script>
+    $(document).ready(function(){
+        $("#table").hide();
+        $("#search").click(function(){
+            $("#table tbody tr").remove();
+            $.get("https://api.github.com/users/" + $("#usr").val() + "/repos", function(data){
+                $.each(data, function(index,element){
+                    var id = element.id;
+                    var name = element.name;
+                    var description = element.description;
+                    var followers = element.stargazers_count;
+                    var insertion = "<tr><td>" + id + "</td><td>" + name + "</td><td>" + description + "</td><td>" + followers +"</td></tr>";
+                    $("#table tbody").append(insertion);
+                });
+            }, "json" );
+           $("#usr").val();
+          $("#table").show();
+        });
+    });
+    </script>
+</body>
+</html>
